@@ -69,7 +69,7 @@
                             <td colspan="2">COA</td>
                             <td colspan="2">DBMS</td>
                             <td colspan="2">FLAT</td>
-                            <td colspan="4" class="friday-jumma-break">Friday Prayer & Recess</td>
+                            <td colspan="4"class="friday-jumma-break" >Friday Prayer & Recess</td>
                             <td colspan="4">Library</td>
                         </tr>
                         <tr>
@@ -81,78 +81,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="mobile-cards" id="mobileCards"></div>
         </div>
     </div>
-
-    <script>
-        // Builds a stacked "day card" view from the table data, so the
-        // schedule works with no horizontal scrolling at all on phones.
-        (function () {
-            var periods = [
-                { start: "09:00", end: "09:55" },
-                { start: "09:55", end: "10:50" },
-                { start: "10:50", end: "11:45" },
-                { start: "11:45", end: "12:40" },
-                { start: "12:40", end: "01:10" },
-                { start: "01:10", end: "02:05" },
-                { start: "02:05", end: "03:00" }
-            ];
-            // width (in colspan units) that each period occupies in the table
-            var widths = [1, 1, 2, 2, 2, 2, 2];
-            var boundaries = [0];
-            widths.forEach(function (w) {
-                boundaries.push(boundaries[boundaries.length - 1] + w);
-            });
-
-            function timeRangeForSpan(offset, span) {
-                var startIdx = boundaries.indexOf(offset);
-                var endIdx = boundaries.indexOf(offset + span) - 1;
-                if (startIdx === -1 || endIdx === -1) return "";
-                return periods[startIdx].start + " - " + periods[endIdx].end;
-            }
-
-            function buildCards() {
-                var container = document.getElementById("mobileCards");
-                if (!container) return;
-                var rows = document.querySelectorAll(".time-table tbody tr");
-                var html = "";
-
-                rows.forEach(function (row) {
-                    var day = row.querySelector("th").textContent.trim();
-                    var cells = row.querySelectorAll("td");
-                    var offset = 0;
-                    var itemsHtml = "";
-
-                    cells.forEach(function (cell) {
-                        var span = parseInt(cell.getAttribute("colspan") || "1", 10);
-                        var time = timeRangeForSpan(offset, span);
-                        var isBreak = cell.classList.contains("lunch") || cell.classList.contains("friday-jumma-break");
-                        itemsHtml +=
-                            '<div class="day-card-row' + (isBreak ? " is-break" : "") + '">' +
-                            '<span class="day-card-time">' + time + "</span>" +
-                            '<span class="day-card-subject">' + cell.textContent.trim() + "</span>" +
-                            "</div>";
-                        offset += span;
-                    });
-
-                    var highlight = row.classList.contains("row-highlight") ? " row-highlight" : "";
-                    html +=
-                        '<div class="day-card' + highlight + '">' +
-                        '<h2 class="day-card-title">' + day + "</h2>" +
-                        itemsHtml +
-                        "</div>";
-                });
-
-                container.innerHTML = html;
-            }
-
-            if (document.readyState === "loading") {
-                document.addEventListener("DOMContentLoaded", buildCards);
-            } else {
-                buildCards();
-            }
-        })();
-    </script>
 </body>
 </html>
